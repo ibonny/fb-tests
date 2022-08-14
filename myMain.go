@@ -12,32 +12,59 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+func createRecord(builder *flatbuffers.Builder, firstName string, lastName string) flatbuffers.UOffsetT {
+	fn := builder.CreateString(firstName)
+	ln := builder.CreateString(lastName)
+
+	person.PersonStart(builder)
+	person.PersonAddFirstName(builder, fn)
+	person.PersonAddLastName(builder, ln)
+	temp := person.PersonEnd(builder)
+
+	builder.Finish(temp)
+
+	return temp
+}
+
 func main() {
 	builder := flatbuffers.NewBuilder(0)
 
-	// Create some weapons for our Monster ("Sword" and "Axe").
-	firstName := builder.CreateString("Ian")
-	lastName := builder.CreateString("Bonnycastle")
-	firstName2 := builder.CreateString("Shannan")
-	lastName2 := builder.CreateString("Stewart")
+	// firstName := builder.CreateString("Ian")
+	// lastName := builder.CreateString("Bonnycastle")
+	// firstName2 := builder.CreateString("Shannan")
+	// lastName2 := builder.CreateString("Stewart")
 
-	person.PersonStart(builder)
-	person.PersonAddFirstName(builder, firstName)
-	person.PersonAddLastName(builder, lastName)
-	ian := person.PersonEnd(builder)
+	// person.PersonStart(builder)
+	// person.PersonAddFirstName(builder, firstName)
+	// person.PersonAddLastName(builder, lastName)
+	// ian := person.PersonEnd(builder)
 
-	person.PersonStart(builder)
-	person.PersonAddFirstName(builder, firstName2)
-	person.PersonAddLastName(builder, lastName2)
-	shannan := person.PersonEnd(builder)
+	// builder.Finish(ian)
+
+	// person.PersonStart(builder)
+	// person.PersonAddFirstName(builder, firstName2)
+	// person.PersonAddLastName(builder, lastName2)
+	// shannan := person.PersonEnd(builder)
 
 	// builder.Finish(ian)
 
 	// people.PeopleStart(builder)
 
+	// This has to be done in this order, or else you get an error.
+	// panic: Incorrect creation order: object must not be nested.
+	var thePeople []flatbuffers.UOffsetT
+
+	thePeople = append(thePeople, createRecord(builder, "Shannan", "Stewart"))
+	thePeople = append(thePeople, createRecord(builder, "Ian", "Bonnycastle"))
+
 	people.PeopleStartPeopleVector(builder, 2)
-	builder.PrependUOffsetT(shannan)
-	builder.PrependUOffsetT(ian)
+
+	for _, person := range thePeople {
+		builder.PrependUOffsetT(person)
+	}
+
+	// builder.PrependUOffsetT(createRecord(builder, "Shannan", "Stewart"))
+	// builder.PrependUOffsetT(createRecord(builder, "Ian", "Bonnycastle"))
 	peopleVec := builder.EndVector(2)
 
 	people.PeopleStart(builder)
