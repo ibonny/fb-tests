@@ -1,0 +1,22 @@
+namespace PublicDataRecord;
+
+table Record {
+    code: string;
+    authors: string;
+    date_of_publication: string;
+    title: string;
+    place_of_publication: string;
+    primary_ubis: string;
+    secondary_ubis: string;
+    if_multiple: string;
+    region: string;
+    country: string;
+    analytical_framework: string;
+    multiple_frameworks: string;
+}
+
+table Records {
+    recs: [Record];
+}
+
+root_type Records;

@@ -74,6 +74,8 @@ func main() {
 
 	bytes := builder.FinishedBytes()
 
+	fmt.Println(len(bytes))
+
 	err := ioutil.WriteFile("testout.dat", bytes, 0644)
 
 	if err != nil {
@@ -90,6 +92,8 @@ func main() {
 	mmap, _ := mmap.Map(f, mmap.RDWR, 0)
 
 	defer mmap.Unmap()
+
+	fmt.Println(len(mmap))
 
 	newPeople := people.GetRootAsPeople(mmap, 0)
 
