@@ -107,11 +107,13 @@ func main() {
 	}
 
 	if len(os.Args) > 1 && os.Args[1] == "read" {
-		if len(os.Args) < 2 {
+		if len(os.Args) < 3 {
 			fmt.Println("Please provide an index number, zero offset.")
 
 			os.Exit(1)
 		}
+
+		fmt.Println(os.Args)
 
 		i, err := strconv.ParseInt(os.Args[2], 10, 64)
 
